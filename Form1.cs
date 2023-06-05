@@ -59,7 +59,7 @@ namespace Bingo
         private async void Button_Get_Bingos(object sender, MouseEventArgs e)
         {
             string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-            string file_Bingos = Path.Combine(currentDir, @"..\..\saves\bingos");
+            string file_Bingos = Path.Combine(currentDir, @"saves\bingos");
             string fPath_Bingos = Path.GetFullPath(file_Bingos);
 
             if (File.Exists(fPath_Bingos))
@@ -86,7 +86,7 @@ namespace Bingo
         private void Button_Log_Bingo(object sender, MouseEventArgs e)
         {
             string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-            string file_Bingos = Path.Combine(currentDir, @"..\..\saves\bingos");
+            string file_Bingos = Path.Combine(currentDir, @"saves\bingos");
             string fPath_Bingos = Path.GetFullPath(file_Bingos);
             
             int acc = 0;
@@ -142,9 +142,9 @@ namespace Bingo
         private void Load_Click(object sender, EventArgs e)
         {
             string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-            string file_Card = Path.Combine(currentDir, @"..\..\saves\card");
+            string file_Card = Path.Combine(currentDir, @"saves\card");
             string fPath_Card = Path.GetFullPath(file_Card);
-            string file_Progress = Path.Combine(currentDir, @"..\..\saves\progress");
+            string file_Progress = Path.Combine(currentDir, @"saves\progress");
             string fPath_Progress = Path.GetFullPath(file_Progress);
 
             Clear_Board(sender, e);
@@ -190,9 +190,9 @@ namespace Bingo
         private void Save_Click(object sender, EventArgs e)
         {
             string currentDir = AppDomain.CurrentDomain.BaseDirectory;
-            string file_Card = Path.Combine(currentDir, @"..\..\saves\card");
+            string file_Card = Path.Combine(currentDir, @"saves\card");
             string fPath_Card = Path.GetFullPath(file_Card);
-            string file_Progress = Path.Combine(currentDir, @"..\..\saves\progress");
+            string file_Progress = Path.Combine(currentDir, @"saves\progress");
             string fPath_Progress = Path.GetFullPath(file_Progress);
 
             using (var stream = File.Open(fPath_Card, FileMode.OpenOrCreate))
@@ -279,7 +279,7 @@ namespace Bingo
 
         private void PopulateDataGridView()
         {
-            string[] memes = { "Sulfuric acid is dead", "OpenTTD moment", "John disconnects something",
+            List<string> memes = new List<string> { "Sulfuric acid is dead", "OpenTTD moment", "John disconnects something",
                                 "New Foundry still not done", "X acid is dead", "Train kill",
                                 ">5 refactor tags", ">15 refactor tags", "Incomprehensible screaming",
                                 "Why isn't research ticking?", "Server crashes", "Power problems",
@@ -289,7 +289,7 @@ namespace Bingo
                                 "Pipe wages a useless war", "John forgets he's the host",
                                 "Fox assisted auto's", "Fox tries to offload work",
                                 "Fox complains about spaghetti", "Pipe mentions fluid capacity",
-                                "True Nukes almost crashes", "Update confusion", "John/Pipe spends ages in circuits",
+                                "True Nukes almost crashes", "Update confusion", "John/Pipe spends ages in circuitry",
                                 "It's just temporary", "Update changes recipes" };
 
             RemoveEmptyRows();
@@ -297,22 +297,16 @@ namespace Bingo
             // 2D array of 5x5 with an index randomizer that adds all the strings
             // overrule the for loop for freespace
             // for each index, random pick from list of options, ensure pick isn't in array
-            string[,] cards = new string[5, 5];
-            List<string> memeCopy = new List<string>();
 
-            for (int i = 0; i < memes.Length; i++)
-            {
-                string s = memes[i];
-                memeCopy.Add(s); // copies memes string[] to a memeCopy List<>
-            }
+            string[,] cards = new string[5, 5];
 
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    int indexed = random.Next(0, memeCopy.Count);
-                    string pick = memeCopy[indexed];
-                    memeCopy.RemoveAt(indexed);
+                    int indexed = random.Next(0, memes.Count);
+                    string pick = memes[indexed];
+                    memes.RemoveAt(indexed);
 
                     cards[i, j] = pick;
                 }
@@ -337,7 +331,6 @@ namespace Bingo
                 row.Height = 50;
             }
 
-            memeCopy.Clear();
             RemoveEmptyRows();
         }
 
