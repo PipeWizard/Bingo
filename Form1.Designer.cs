@@ -34,7 +34,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonGetBingos = new System.Windows.Forms.Button();
             this.buttonLogbingo = new System.Windows.Forms.Button();
-            this.bingoBox = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,21 +84,12 @@
             this.buttonLogbingo.Text = "Log Bingo";
             this.buttonLogbingo.UseVisualStyleBackColor = true;
             // 
-            // bingoBox
-            // 
-            this.bingoBox.Location = new System.Drawing.Point(627, 272);
-            this.bingoBox.Multiline = false;
-            this.bingoBox.Name = "bingoBox";
-            this.bingoBox.Size = new System.Drawing.Size(157, 22);
-            this.bingoBox.TabIndex = 3;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(800, 445);
-            this.Controls.Add(this.bingoBox);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -108,7 +98,6 @@
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
@@ -118,7 +107,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonLogbingo;
         private System.Windows.Forms.Button buttonGetBingos;
-        private System.Windows.Forms.TextBox bingoBox;
     }
 }
 

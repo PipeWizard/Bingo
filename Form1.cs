@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace Bingo
 {
@@ -31,6 +24,7 @@ namespace Bingo
         public Form1()
         {
             InitializeComponent();
+            Directory.CreateDirectory("saves");
             Load += new EventHandler(Form1_Load);
         }
 
@@ -43,7 +37,6 @@ namespace Bingo
 
         private void SetupLayout()
         {
-            bingoBox.Visible = false;
             Menu = new MainMenu();
 
             MenuItem item = new MenuItem("File");
@@ -69,18 +62,25 @@ namespace Bingo
             string file_Bingos = Path.Combine(currentDir, @"..\..\saves\bingos");
             string fPath_Bingos = Path.GetFullPath(file_Bingos);
 
-            using (FileStream fs = File.Open(fPath_Bingos, FileMode.Open))
+            if (File.Exists(fPath_Bingos))
             {
-                //BinaryFormatter bf = new BinaryFormatter();
-                using (BinaryReader br = new BinaryReader(fs))
+                using (FileStream fs = File.Open(fPath_Bingos, FileMode.Open))
                 {
-                    bingoBox.Text = "Total number of Bingos: " + br.ReadInt32();
-                    bingoBox.Visible = true;
-                    bingoBox.ReadOnly = true;
+                    //BinaryFormatter bf = new BinaryFormatter();
+                    using (BinaryReader br = new BinaryReader(fs))
+                    {
+                        //bingoBox.Text = "Total number of Bingos: " + br.ReadInt32();
+                        //bingoBox.Visible = true;
+                        //bingoBox.ReadOnly = true;
+                        DialogResult _ = MessageBox.Show("Bingos: " + br.ReadInt32(), "Bingo Log", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    }
                 }
+                await Task.Delay(5000);
+           }
+            else
+            {
+                DialogResult _ = MessageBox.Show("No bingos logged.", "Bingo Log", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
-            await Task.Delay(5000);
-            bingoBox.Visible = false;
         }
 
         private void Button_Log_Bingo(object sender, MouseEventArgs e)
@@ -94,18 +94,14 @@ namespace Bingo
             {
                 using (BinaryReader br = new BinaryReader(stream, Encoding.UTF8, true))
                 {
-                    //if (br.PeekChar() != -1)
-                    //{
-                    acc = br.ReadInt32();
-                    //}
+                    if (br.PeekChar() != -1)
+                        acc = br.ReadInt32();
                 }
                 using (BinaryWriter bw = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
-                    Console.WriteLine(acc);
                     acc++;
                     bw.Seek(0, SeekOrigin.Begin);
                     bw.Write(acc);
-                    Console.WriteLine(acc);
                 }
             }
         }
@@ -168,10 +164,7 @@ namespace Bingo
                         }
                     }
                 }
-            }
 
-            if (File.Exists(fPath_Progress))
-            {
                 using (var stream = File.Open(fPath_Progress, FileMode.Open))
                 {
                     using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8, false))
@@ -188,6 +181,10 @@ namespace Bingo
                     }
                 }
             }
+            else
+            {
+                DialogResult _ = MessageBox.Show("No save detected.  Please save a card before attempting to load one.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -198,7 +195,7 @@ namespace Bingo
             string file_Progress = Path.Combine(currentDir, @"..\..\saves\progress");
             string fPath_Progress = Path.GetFullPath(file_Progress);
 
-            using (var stream = File.Open(fPath_Card, FileMode.Create))
+            using (var stream = File.Open(fPath_Card, FileMode.OpenOrCreate))
             {
                 using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
@@ -212,9 +209,9 @@ namespace Bingo
                 }
             }
 
-            using (var stream = File.Open(fPath_Progress, FileMode.Create))
+            using (var stream = File.Open(fPath_Progress, FileMode.OpenOrCreate))
             {
-                using (BinaryWriter writer = new BinaryWriter(stream,Encoding.UTF8, false))
+                using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
                     for (int i = 0; i < dGV.RowCount; i++)
                     {
