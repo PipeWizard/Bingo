@@ -118,7 +118,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonLogbingo;
         private System.Windows.Forms.Button buttonGetBingos;
-        private System.Windows.Forms.TextBox bingoBox;
     }
 }
 
